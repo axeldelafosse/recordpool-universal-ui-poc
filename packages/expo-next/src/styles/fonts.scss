@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Arial Rounded MT Std';
+  src: url('/fonts/Arial Rounded MT Std.woff2') format('woff2'),
+    url('/fonts/Arial Rounded MT Std.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Arial Rounded MT Std Bold';
+  src: url('/fonts/Arial Rounded MT Std Bold.woff2') format('woff2'),
+    url('/fonts/Arial Rounded MT Std Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Arial Rounded MT Std Extra Bold';
+  src: url('/fonts/Arial Rounded MT Std Extra Bold.woff2') format('woff2'),
+    url('/fonts/Arial Rounded MT Std Extra Bold.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}

@@ -1,0 +1,79 @@
+diff --git a/node_modules/@expo/webpack-config/webpack/addons/withOptimizations.js b/node_modules/@expo/webpack-config/webpack/addons/withOptimizations.js
+index 8411aeb..6e91898 100644
+--- a/node_modules/@expo/webpack-config/webpack/addons/withOptimizations.js
++++ b/node_modules/@expo/webpack-config/webpack/addons/withOptimizations.js
+@@ -7,6 +7,7 @@ exports.isDebugMode = void 0;
+ const getenv_1 = require("getenv");
+ const is_wsl_1 = __importDefault(require("is-wsl"));
+ const optimize_css_assets_webpack_plugin_1 = __importDefault(require("optimize-css-assets-webpack-plugin"));
++const css_minimizer_webpack_plugin_1 = __importDefault(require("css-minimizer-webpack-plugin"));
+ const postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
+ const terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
+ /**
+@@ -81,21 +82,7 @@ function withOptimizations(webpackConfig) {
+                 sourceMap: shouldUseSourceMap,
+             }),
+             // This is only used in production mode
+-            new optimize_css_assets_webpack_plugin_1.default({
+-                cssProcessorOptions: {
+-                    parser: postcss_safe_parser_1.default,
+-                    map: shouldUseSourceMap
+-                        ? {
+-                            // `inline: false` forces the sourcemap to be output into a
+-                            // separate file
+-                            inline: false,
+-                            // `annotation: true` appends the sourceMappingURL to the end of
+-                            // the css file, helping the browser find the sourcemap
+-                            annotation: true,
+-                        }
+-                        : false,
+-                },
+-            }),
++            new css_minimizer_webpack_plugin_1.default()
+         ],
+         // Automatically split vendor and commons
+         // https://twitter.com/wSokra/status/969633336732905474
+diff --git a/node_modules/@expo/webpack-config/webpack/addons/withUnimodules.js b/node_modules/@expo/webpack-config/webpack/addons/withUnimodules.js
+index e293a98..5411c51 100644
+--- a/node_modules/@expo/webpack-config/webpack/addons/withUnimodules.js
++++ b/node_modules/@expo/webpack-config/webpack/addons/withUnimodules.js
+@@ -39,6 +39,7 @@ function withUnimodules(webpackConfig = {}, env = {}, argv = {}) {
+         webpackConfig.output = {};
+     // Attempt to use the input webpack config mode
+     env.mode = env.mode || webpackConfig.mode;
++    const isWebpack5 = argv.webpack5
+     const environment = env_1.validateEnvironment(env);
+     let { supportsFontLoading } = argv;
+     // If the args don't specify this then we'll check if the input already supports font loading.
+@@ -117,7 +118,7 @@ function withUnimodules(webpackConfig = {}, env = {}, argv = {}) {
+     };
+     // Transpile and remove expo modules from Next.js externals.
+     const includeFunc = babelLoader.include;
+-    webpackConfig = ignoreExternalModules(webpackConfig, includeFunc);
++    webpackConfig = ignoreExternalModules(webpackConfig, includeFunc, isWebpack5);
+     // Add a loose requirement on the ResizeObserver polyfill if it's installed...
+     webpackConfig = withEntry_1.default(webpackConfig, env, {
+         entryPath: 'resize-observer-polyfill/dist/ResizeObserver.global',
+@@ -137,7 +138,7 @@ exports.default = withUnimodules;
+  * @param webpackConfig Config to be modified
+  * @param shouldIncludeModule A method that returns a boolean when the input module should be transpiled and externed.
+  */
+-function ignoreExternalModules(webpackConfig, shouldIncludeModule) {
++function ignoreExternalModules(webpackConfig, shouldIncludeModule, isWebpack5) {
+     if (!webpackConfig.externals) {
+         return webpackConfig;
+     }
+@@ -148,6 +149,13 @@ function ignoreExternalModules(webpackConfig, shouldIncludeModule) {
+         if (typeof external !== 'function') {
+             return external;
+         }
++
++        if (isWebpack5) {
++            return ((ctx) => {
++                const relPath = path_1.default.join('node_modules', ctx.request);
++                return shouldIncludeModule(relPath) ? undefined : external(ctx);
++            })
++        }
+         return ((ctx, req, cb) => {
+             const relPath = path_1.default.join('node_modules', req);
+             return shouldIncludeModule(relPath) ? cb() : external(ctx, req, cb);

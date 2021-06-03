@@ -1,0 +1,58 @@
+version: '3.6'
+
+volumes:
+  db_data:
+  redis_data:
+  nest_node_modules:
+  nest_dist:
+
+services:
+  nest:
+    container_name: record-pool-nest
+    build: ./packages/nest
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./packages/nest:/usr/app
+      - nest_node_modules:/usr/app/node_modules
+      - nest_dist:/usr/app/dist
+    ports:
+      - 4000:4000 # nest
+      - 9229:9229 # node --inspect
+    command: yarn start:dev:docker
+
+  postgres:
+    container_name: record-pool-postgres
+    image: postgres:12
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+
+  hasura:
+    container_name: record-pool-hasura
+    image: hasura/graphql-engine:v1.3.3.cli-migrations-v2
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - nest
+    restart: always
+    env_file: ./packages/hasura/.env
+    volumes:
+      - ./packages/hasura/migrations:/hasura-migrations
+
+  redis:
+    container_name: record-pool-redis
+    image: bitnami/redis:5.0.6
+    restart: always
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_PASSWORD=redis
+    volumes:
+      - redis_data:/bitnami/redis/data

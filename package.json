@@ -1,0 +1,29 @@
+{
+  "name": "recordpool",
+  "private": true,
+  "devDependencies": {
+    "expo-yarn-workspaces": "^1.5.1",
+    "patch-package": "^6.4.7"
+  },
+  "workspaces": [
+    "packages/app",
+    "packages/expo-next",
+    "packages/radix/*"
+  ],
+  "scripts": {
+    "start": "cd packages/expo-next && yarn start:expo",
+    "dev": "cd packages/expo-next && yarn dev",
+    "dev:hasura": "cd packages/hasura && yarn dev",
+    "deploy": "vercel --prod --no-clipboard",
+    "up": "./scripts/up.sh",
+    "down": "docker-compose down --remove-orphans --volumes",
+    "logs": "docker-compose logs -f --tail 100",
+    "ssh": "./scripts/ssh.sh",
+    "reset": "./scripts/reset.sh",
+    "postinstall": "patch-package"
+  },
+  "resolutions": {
+    "html-webpack-plugin": "^5.3.1",
+    "webpack": "^5"
+  }
+}

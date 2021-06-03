@@ -1,0 +1,12 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.js",
+  "scripts": {
+    "dev": "yarn generate-graphql-code:watch",
+    "generate-graphql-code": "graphql-codegen --config graphql-codegen.js -r dotenv/config .env",
+    "generate-graphql-code:watch": "yarn generate-graphql-code -w"
+  },
+  "license": "MIT"
+}

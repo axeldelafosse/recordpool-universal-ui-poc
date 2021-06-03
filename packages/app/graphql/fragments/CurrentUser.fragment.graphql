@@ -1,0 +1,10 @@
+fragment CurrentUser on users {
+  ...User
+  email
+  records: users_records(order_by: { position: asc }) {
+    record {
+      ...Record
+    }
+    position
+  }
+}

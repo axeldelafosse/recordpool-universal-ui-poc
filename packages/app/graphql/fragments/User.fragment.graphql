@@ -1,0 +1,8 @@
+fragment User on users {
+  id
+  firstName: first_name
+  lastName: last_name
+  picture
+  lastSeenAt: last_seen_at
+  locale
+}

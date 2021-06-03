@@ -1,0 +1,48 @@
+{
+  "builds": {
+    "android": {
+      "release": {
+        "workflow": "managed",
+        "releaseChannel": "production",
+        "env": {
+          "STAGE": "production"
+        }
+      },
+      "preview": {
+        "workflow": "managed",
+        "releaseChannel": "staging",
+        "distribution": "internal",
+        "env": {
+          "STAGE": "staging"
+        }
+      },
+      "development": {
+        "workflow": "managed",
+        "distribution": "internal",
+        "gradleCommand": ":app:assembleDebug"
+      }
+    },
+    "ios": {
+      "release": {
+        "workflow": "managed",
+        "releaseChannel": "production",
+        "env": {
+          "STAGE": "production"
+        }
+      },
+      "preview": {
+        "workflow": "managed",
+        "releaseChannel": "staging",
+        "distribution": "internal",
+        "env": {
+          "STAGE": "staging"
+        }
+      },
+      "development": {
+        "workflow": "managed",
+        "distribution": "internal",
+        "schemeBuildConfiguration": "Debug"
+      }
+    }
+  }
+}

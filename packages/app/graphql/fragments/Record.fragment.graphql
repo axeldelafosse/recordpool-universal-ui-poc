@@ -1,0 +1,21 @@
+fragment Record on records {
+  id
+  youtubeId: youtube_id
+  beatportId: beatport_id
+  album
+  artist
+  bpm
+  duration
+  durationSeconds: duration_seconds
+  genre
+  key
+  openKey: open_key
+  label
+  mix
+  name
+  slug
+  image
+  title
+  createdAt: created_at
+  updatedAt: updated_at
+}
