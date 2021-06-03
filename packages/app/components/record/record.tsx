@@ -136,24 +136,24 @@ export function Record(props: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <DropdownMenu.Root open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-      <ContextMenu.Root>
-        <ContextMenu.Trigger>
+    <ContextMenu.Root>
+      <ContextMenu.Trigger>
+        <DropdownMenu.Root open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <RecordContent setIsMenuOpen={setIsMenuOpen} {...props} />
-        </ContextMenu.Trigger>
 
-        <ContextMenu.Content style={menuStyle}>
-          <Menu isContextMenu setIsMenuOpen={setIsMenuOpen} />
-        </ContextMenu.Content>
+          <DropdownMenu.Content
+            style={Platform.OS === 'web' ? menuStyle : bottomSheetModalStyle}
+            handleComponent={customHandle}
+            snapPoints={['20%']}
+          >
+            <Menu setIsMenuOpen={setIsMenuOpen} />
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </ContextMenu.Trigger>
 
-        <DropdownMenu.Content
-          style={Platform.OS === 'web' ? menuStyle : bottomSheetModalStyle}
-          handleComponent={customHandle}
-          snapPoints={['20%']}
-        >
-          <Menu setIsMenuOpen={setIsMenuOpen} />
-        </DropdownMenu.Content>
-      </ContextMenu.Root>
-    </DropdownMenu.Root>
+      <ContextMenu.Content style={menuStyle}>
+        <Menu isContextMenu setIsMenuOpen={setIsMenuOpen} />
+      </ContextMenu.Content>
+    </ContextMenu.Root>
   );
 }
