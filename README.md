@@ -200,24 +200,22 @@ index 47a2c55..ef20902 100644
 -        { checkForDefaultPrevented: false }
 -      )}
 -    />
-+    <View style={{ flex: 1 }}>
-+      <Modal
-+        animationType="none"
-+        transparent={true}
-+        visible={context.open}
-+        onRequestClose={() => {
-+          context.onOpenChange(!context.open);
-+        }}
-+      >
-+        <BottomSheet
-+          {...contentProps}
-+          ref={bottomSheetRef}
-+          animateOnMount={true}
-+          enablePanDownToClose={true}
-+          onChange={handleSheetChanges}
-+        />
-+      </Modal>
-+    </View>
++    <Modal
++      animationType="none"
++      transparent={true}
++      visible={context.open}
++      onRequestClose={() => {
++        context.onOpenChange(!context.open);
++      }}
++    >
++      <BottomSheet
++        {...contentProps}
++        ref={bottomSheetRef}
++        animateOnMount={true}
++        enablePanDownToClose={true}
++        onChange={handleSheetChanges}
++      />
++    </Modal>
    );
  }) as DropdownMenuContentPrimitive;
 ```
